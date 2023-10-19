@@ -2,57 +2,62 @@ from RPi import GPIO
 from ky040.KY040 import KY040
 from hx711 import HX711
 from RPLCD.gpio import CharLCD
+import time
 
-# settings for load cell
-DOUT_PIN = 17
-PD_SCK_PIN = 21
-CHANNEL = 'A'
-GAIN = 64
+##############################################################################
+# Pi IO setup
+##############################################################################
 
-RAW_ZERO_VALUE = 123
-RAW_CALIB_VALUE = 145373
-CALIB_GRAMS = 1000
+LC_DOUT_PIN = 17
+LC_SCK_PIN = 21
 
-# settings for LCD
-PIN_RS = 26
-PIN_RW = 19
-PIN_E = 13
-PINS_DATA = [6, 5, 11, 9]
+LCD_PIN_RS = 26
+LCD_PIN_RW = 19
+LCD_PIN_E = 13
+LCD_PINS_DATA = [6, 5, 11, 9]
 
-LCD_TEXT = ['Filament: 0000g', 
-            '|zero|add:|+000|']
-ZERO_OFFSET = 0
-ADD_VALUE = 0
-CURRENT_WEIGHT = 0
-
-CURRENT_SELECTION = 'zero'
-
-# settings for rotary encoder
 ROT_CLK = 23
 ROT_DT = 24
 ROT_SW = 25
 
-ROTARY_CHANGE = 0
-ROTARY_SWITCH = False
-
-def on_rotary_change(direction):
-    global ROTARY_CHANGE
-    ROTARY_CHANGE+=direction
-
-def on_switch():
-    global ROTARY_SWITCH
-    ROTARY_SWITCH = True
+RAW_ZERO_VALUE = 123 # needs to be set
+RAW_CALIB_VALUE = 145373    # needs to be set
+CALIB_GRAMS = 1000
+LC_MAX_GRAMS = 9999
+RAW_MAX_VALUE = RAW_CALIB_VALUE * LC_MAX_GRAMS / CALIB_GRAMS
 
 ##############################################################################
 # Init
 ##############################################################################
+# global variables
+zero_offset = 0
+set_add_value = 0
+display_add_value = 0
+current_weight = 0
 
+current_selection = 'zero'
+
+rotary_change = 0
+rotary_switch = False
+
+# rotary encoder callbacks
+def on_rotary_change(direction):
+    global rotary_change
+    rotary_change+=direction
+
+def on_switch():
+    global rotary_switch
+    rotary_switch = True
+
+# init peripherals
 try:
-    LoadCell = HX711(dout_pin=17, pd_sck_pin=21, channel='A', gain=64)
+    LoadCell = HX711(dout_pin=LC_DOUT_PIN, pd_sck_pin=LC_SCK_PIN, 
+                     channel='A', gain=64)
     LoadCell.reset()
 
     # init LCD
-    lcd = CharLCD(pin_rs=PIN_RS, pin_rw=PIN_RW, pin_e=PIN_E, pins_data=PINS_DATA, numbering_mode=GPIO.BOARD)
+    lcd = CharLCD(pin_rs=LCD_PIN_RS, pin_rw=LCD_PIN_RW, pin_e=LCD_PIN_E, 
+                  pins_data=LCD_PINS_DATA, numbering_mode=GPIO.BOARD)
     lcd.clear()
 
     # init rotary encoder
@@ -61,44 +66,38 @@ try:
 
 except Exception as e:
     rotary.stop()
-    GPIO.cleanup()  # always do a GPIO cleanup in your scripts!
+    GPIO.cleanup() 
     raise e
-
 
 ##############################################################################
 # Functions
 ##############################################################################
 
+def remap(value, from_min=RAW_ZERO_VALUE, from_max=RAW_MAX_VALUE, 
+                to_min=0, to_max=LC_MAX_GRAMS):
+    return (value - from_min) * (to_max - to_min) / (from_max - from_min) + to_min
 
-
-def get_weight(map_zero, map_calib, calib_grams=1000):
-    global CURRENT_WEIGHT
-
+def get_weight():
     raw_value = LoadCell.get_raw_data(times=3)
-
-    #remap raw value to grams using zero and calib values
-    
-    mapped_value = map(raw_value, map_zero, map_calib, 0, calib_grams)
-
-
-
-    return 
+    mapped_weight = round(remap(raw_value))
+    adjusted_weight = mapped_weight + zero_offset + set_add_value
+    return adjusted_weight
 
 def write_lcd(option):
     lcd.clear()
-    line_one = f'Filament:{CURRENT_WEIGHT:04d}g'
+    line_one = f'Filament:{current_weight:04d}g'
 
-    if ADD_VALUE >= 0:
-        add_value = f'+{ADD_VALUE:03d}'
+    if display_add_value >= 0:
+        display_add_value = f'+{display_add_value:03d}'
     else:
-        add_value = f'{ADD_VALUE:03d}'
+        display_add_value = f'{display_add_value:03d}'
 
     if option == 'zero':
-        line_two = f'►zero◄add:|{add_value}|'
+        line_two = f'►zero◄add:|{display_add_value}|'
     elif option == 'add':
-        line_two = f'|zero►add:◄{add_value}|'
+        line_two = f'|zero►add:◄{display_add_value}|'
     else:
-        line_two = f'|zero|add:►{add_value}◄'
+        line_two = f'|zero|add:►{display_add_value}◄'
 
     if option == 'value_edit':
         lcd.cursor_pos = (1, 13)
@@ -110,7 +109,30 @@ def write_lcd(option):
     lcd.crlf()
     lcd.write_string(line_two)
 
-    return
+    return line_one, line_two
+
+def rotary_action(rotary_change):
+    global current_selection
+    global display_add_value
+    if current_selection == 'zero':
+        if rotary_change > 0:
+            current_selection = 'add'
+        elif rotary_change < 0:
+            current_selection = 'value'
+    elif current_selection == 'add':
+        if rotary_change > 0:
+            current_selection = 'value'
+        elif rotary_change < 0:
+            current_selection = 'zero'
+    elif current_selection == 'value':
+        if rotary_change > 0:
+            current_selection = 'zero'
+        elif rotary_change < 0:
+            current_selection = 'add'
+    else:
+        display_add_value += rotary_change * 10
+
+    return current_selection
 
 
 
@@ -123,11 +145,12 @@ def write_lcd(option):
 
 def main():
     while True:
+        if rotary_change != 0:
+            rotary_action(rotary_change)
+                
 
+        pass
 
-
-
-        if 
 
 
 
@@ -138,18 +161,11 @@ def main():
 # Main call
 ##############################################################################
 
-try:
+if __name__ == '__main__':
+    try:
+        main()
 
-
-
-
-
-    pass
-
-
-
-
-except Exception as e:
-    rotary.stop()
-    GPIO.cleanup() 
-    raise e
+    except Exception as e:
+        rotary.stop()
+        GPIO.cleanup() 
+        raise e
