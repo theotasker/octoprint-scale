@@ -93,6 +93,7 @@ def main():
         LCD.update(current_weight)
 
         time.sleep(0.1)
+        print('cycle')
 
 
 ##############################################################################
