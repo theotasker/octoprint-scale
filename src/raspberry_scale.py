@@ -12,6 +12,8 @@ import time
 # Pi GPIO setup (GPIO numbering mode on the Pi is set to BCM)
 ##############################################################################
 
+print('Setting up GPIO...')
+
 LC_DOUT_PIN = 17
 LC_SCK_PIN = 21
 
@@ -33,6 +35,8 @@ RAW_CALIB_VALUE = 145373    # load cell raw value when calibration weight is on
 ##############################################################################
 
 # init peripherals, giving pin numbers on the Pi
+
+print('Init peripherals...')
 try:
     LoadCell = LoadCell(dout_pin=LC_DOUT_PIN, pd_sck_pin=LC_SCK_PIN)
     LoadCell.set_calib_values(RAW_ZERO_VALUE, RAW_CALIB_VALUE)
