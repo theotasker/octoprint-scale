@@ -56,17 +56,24 @@ class LCD():
 
 if __name__ == '__main__':
 
-    print('Testing LCD')
-    from RPi import GPIO
-    from time import sleep
+    try:
+        print('Testing LCD')
+        from RPi import GPIO
+        from time import sleep
 
-    LCD_PIN_RS = 26
-    LCD_PIN_RW = 19
-    LCD_PIN_E = 13
-    LCD_PINS_DATA = [6, 5, 11, 9]
+        LCD_PIN_RS = 26
+        LCD_PIN_RW = 19
+        LCD_PIN_E = 13
+        LCD_PINS_DATA = [6, 5, 11, 9]
 
-    LCD = LCD(LCD_PIN_RS, LCD_PIN_RW, LCD_PIN_E, LCD_PINS_DATA, GPIO.BCM)
-    LCD.update(0)
+        LCD = LCD(LCD_PIN_RS, LCD_PIN_RW, LCD_PIN_E, LCD_PINS_DATA, GPIO.BCM)
+        LCD.update(0)
 
-    print('Testing LCD complete')
-    sleep(5)
+        print('Testing LCD complete')
+        sleep(5)
+
+    except Exception as e:
+        raise e
+    
+    finally:
+        GPIO.cleanup()
