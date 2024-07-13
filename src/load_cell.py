@@ -30,6 +30,7 @@ class LoadCell():
 
     def get_adjusted_weight(self):
         raw_value = self.load_cell.get_raw_data(times=3)
+        print(raw_value)
         mapped_weight = round(self.remap(raw_value))
         adjusted_weight = mapped_weight + self.zero_offset + self.set_add_mass
         return adjusted_weight
