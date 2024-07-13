@@ -1,5 +1,5 @@
 from hx711 import HX711
-
+from statistics import mean
 
 class LoadCell():
 
@@ -30,8 +30,9 @@ class LoadCell():
 
     def get_adjusted_weight(self):
         raw_value = self.load_cell.get_raw_data(times=6)
-        print(raw_value)
-        mapped_weight = round(self.remap(raw_value))
+        mean_value = round(mean(raw_value))
+        print(mean_value)
+        mapped_weight = round(self.remap(mean_value))
         adjusted_weight = mapped_weight + self.zero_offset + self.set_add_mass
         return adjusted_weight
     
