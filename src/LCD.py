@@ -16,14 +16,14 @@ class LCD():
         return
 
     def format_first_line(self, current_weight_int) -> str:
-        return self.first_line_temp.format(f'{current_weight_int:04d}')
+        return self.FIRST_LINE.format(f'{current_weight_int:04d}')
     
     def format_second_line(self) -> str:
         if self.display_add_int >= 0:
             display_add_str = f'+{self.display_add_int:03d}'
         else:
             display_add_str = f'-{self.display_add_int:03d}'
-        return self.second_line_list[self.current_option].format(display_add_str)
+        return self.SECOND_LINE_LIST[self.current_option].format(display_add_str)
 
     def write(self, first_line, second_line) -> None:
         self.lcd.clear()
