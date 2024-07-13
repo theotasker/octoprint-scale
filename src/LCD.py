@@ -52,3 +52,16 @@ class LCD():
         self.write(first_line, second_line)
         self.current_text = f'{first_line}\n{second_line}'
         return
+    
+
+if __name__ == '__main__':
+    from RPi import GPIO
+
+    LCD_PIN_RS = 26
+    LCD_PIN_RW = 19
+    LCD_PIN_E = 13
+    LCD_PINS_DATA = [6, 5, 11, 9]
+
+    LCD = LCD(LCD_PIN_RS, LCD_PIN_RW, LCD_PIN_E, LCD_PINS_DATA, GPIO.BCM)
+    LCD.update(0)
+    
