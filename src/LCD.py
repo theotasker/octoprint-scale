@@ -45,7 +45,7 @@ class LCD():
         else:
             self.blink_cursor(on=False)
         first_line = self.format_first_line(current_weight_int)
-        second_line = self.format_second_line(self.display_add_int, self.current_option)
+        second_line = self.format_second_line()
         if self.current_text == f'{first_line}\n{second_line}':
             return
         
