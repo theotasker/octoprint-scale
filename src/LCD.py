@@ -62,7 +62,7 @@ if __name__ == '__main__':
         from time import sleep
 
         LCD_PIN_RS = 21
-        LCD_PIN_RW = 19
+        LCD_PIN_RW = 19 # not used
         LCD_PIN_E = 20
         LCD_PINS_DATA = [26, 19, 13, 6]
 

@@ -15,12 +15,12 @@ import time
 print('Setting up GPIO...')
 
 LC_DOUT_PIN = 17
-LC_SCK_PIN = 21
+LC_SCK_PIN = 27
 
-LCD_PIN_RS = 26
-LCD_PIN_RW = 19
-LCD_PIN_E = 13
-LCD_PINS_DATA = [6, 5, 11, 9]
+LCD_PIN_RS = 21
+LCD_PIN_RW = 19 # not used
+LCD_PIN_E = 20
+LCD_PINS_DATA = [26, 19, 13, 6]
 
 ROT_CLK = 23
 ROT_DT = 24
