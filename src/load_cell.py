@@ -38,5 +38,4 @@ class LoadCell():
     
     def zero(self):
         self.load_cell.reset()
-        self.load_cell.tare()
         return

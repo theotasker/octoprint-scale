@@ -1,7 +1,5 @@
 from RPi import GPIO
 
-
-
 from LCD import LCD
 from rotary import Rotary
 from load_cell import LoadCell
@@ -54,10 +52,6 @@ except Exception as e:
 # Functions
 ##############################################################################
 
-
-
-
-        
 
 
 ##############################################################################
