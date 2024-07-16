@@ -12,7 +12,7 @@ class LoadCell():
         return
     
     def set_calib_values(self, raw_zero_value, raw_calib_value, 
-                         calib_grams=1000, lc_max_grams=9999):
+                         calib_grams=500, lc_max_grams=9999):
         self.RAW_ZERO_VALUE = raw_zero_value # load cell raw value when scale is empty
         self.RAW_CALIB_VALUE = raw_calib_value    # load cell raw value when calibration weight is on
         self.CALIB_GRAMS = calib_grams # weight used for calibration
@@ -61,7 +61,7 @@ if __name__ == '__main__':
         LC_SCK_PIN = 27
 
         RAW_ZERO_VALUE = 9478 # load cell raw value when scale is empty
-        RAW_CALIB_VALUE = 145373    # load cell raw value when calibration weight is on
+        RAW_CALIB_VALUE = 60418    # load cell raw value when calibration weight is on
 
         LoadCell = LoadCell(dout_pin=LC_DOUT_PIN, pd_sck_pin=LC_SCK_PIN)
         LoadCell.set_calib_values(RAW_ZERO_VALUE, RAW_CALIB_VALUE)
