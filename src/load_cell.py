@@ -60,7 +60,7 @@ if __name__ == '__main__':
 
         print('Reading load cell values...')
         while True:
-            print(LoadCell.get_raw_data())
+            print(LoadCell.load_cell.get_raw_data())
             sleep(0.5)
 
     except Exception as e:
