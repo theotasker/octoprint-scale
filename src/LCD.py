@@ -3,7 +3,7 @@ from RPLCD.gpio import CharLCD
 
 class LCD():
     FIRST_LINE = 'Filament:{}g'
-    SECOND_LINE_LIST = ['►zero◄add:|{}|', '|zero►add:◄{}|','|zero|add:►{}◄']
+    SECOND_LINE_LIST = ['>zero<add:|{}|', '|zero>add:<{}|','|zero|add:>{}<']
 
     def __init__(self, pin_rs, pin_rw, pin_e, pins_data, numbering_mode):
         self.lcd = CharLCD(pin_rs=pin_rs, pin_rw=pin_rw, pin_e=pin_e, 
@@ -67,7 +67,7 @@ if __name__ == '__main__':
         LCD_PINS_DATA = [26, 19, 13, 6]
 
         LCD = LCD(LCD_PIN_RS, LCD_PIN_RW, LCD_PIN_E, LCD_PINS_DATA, GPIO.BCM)
-        LCD.lcd.add_custom_char(0, [0x04])
+        LCD.write('Testing', 'LCD')
 
         print('Testing LCD complete')
         sleep(5)
