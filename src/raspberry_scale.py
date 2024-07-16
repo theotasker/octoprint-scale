@@ -77,6 +77,7 @@ def main():
             LoadCell.set_add_mass += LCD.display_add_int
 
     elif Rotary.change != 0:
+        print(f'Rotary change: {Rotary.change}')
         if LCD.editing:
             LCD.display_add_int += (Rotary.change * 10)
 
