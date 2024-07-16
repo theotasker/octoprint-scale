@@ -37,5 +37,6 @@ class LoadCell():
         return adjusted_weight
     
     def zero(self):
-        self.load_cell.reset()
+        adjusted_weight = self.get_adjusted_weight()
+        self.set_add_mass -= adjusted_weight
         return
