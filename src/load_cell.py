@@ -72,6 +72,7 @@ if __name__ == '__main__':
             print(LoadCell.load_cell.get_raw_data(times=5))
             print(f'adjusted weight: {LoadCell.get_adjusted_weight()}')
             print(f'took {time.time() - start_time} seconds')
+            time.sleep(1)
 
     except Exception as e:
         raise e
