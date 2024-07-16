@@ -67,7 +67,8 @@ if __name__ == '__main__':
         LCD_PINS_DATA = [26, 19, 13, 6]
 
         LCD = LCD(LCD_PIN_RS, LCD_PIN_RW, LCD_PIN_E, LCD_PINS_DATA, GPIO.BCM)
-        LCD.write('Testing', 'LCD')
+        LCD.lcd.set_xy(0,0)
+        LCD.lcd.add_custom_char(0, [0x04])
 
         print('Testing LCD complete')
         sleep(5)
