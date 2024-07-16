@@ -89,8 +89,8 @@ def main():
                 LCD.current_option = 2
 
         print(f'current_option: {LCD.current_option}')
-        print(f'section: {LCD.SECTION_LIST[LCD.current_option]}')
-        
+        print(f'section: {LCD.SECOND_LINE_LIST[LCD.current_option]}')
+
     current_weight = LoadCell.get_adjusted_weight()
     LCD.update(current_weight)
 
