@@ -15,7 +15,8 @@ class Rotary():
         return
     
     def on_change(self, direction):
-        print(f'Rotary change: {direction}')
+        if direction == 0:
+            direction = -1
         self.change += direction
         return
     
