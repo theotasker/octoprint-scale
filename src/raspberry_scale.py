@@ -24,9 +24,8 @@ ROT_CLK = 23
 ROT_DT = 24
 ROT_SW = 25
 
-RAW_ZERO_VALUE = 123 # load cell raw value when scale is empty
-RAW_CALIB_VALUE = 145373    # load cell raw value when calibration weight is on
-
+RAW_ZERO_VALUE = 9478 # load cell raw value when scale is empty
+RAW_CALIB_VALUE = 51485    # load cell raw value when calibration weight is on
 
 ##############################################################################
 # Init
