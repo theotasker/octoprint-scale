@@ -61,7 +61,7 @@ if __name__ == '__main__':
         print('Reading load cell values...')
         while True:
             start_time = time.time()
-            print(LoadCell.load_cell.get_raw_data(times=4))
+            print(LoadCell.load_cell.get_raw_data(times=8))
             print(f'took {time.time() - start_time} seconds')
 
     except Exception as e:
