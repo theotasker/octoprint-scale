@@ -83,9 +83,9 @@ def main():
         else:
             LCD.current_option += Rotary.change
             if LCD.current_option > 2:
-                LCD.current_option = 0
-            elif LCD.current_option < 0:
                 LCD.current_option = 2
+            elif LCD.current_option < 0:
+                LCD.current_option = 0
 
         Rotary.change = 0
 
