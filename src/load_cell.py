@@ -1,5 +1,6 @@
 from hx711 import HX711
 from RPi import GPIO
+import time
 
 from statistics import mean
 
@@ -60,6 +61,7 @@ if __name__ == '__main__':
 
         while True:
             print(LoadCell.get_raw_data())
+            time.sleep(0.5)
 
     except Exception as e:
         raise e
