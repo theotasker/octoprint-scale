@@ -61,6 +61,7 @@ except Exception as e:
 def main():
     while True:
         if Rotary.switch:
+            print('switch')
             Rotary.switch = False
             Rotary.change = 0
             if LCD.current_option == 2:
@@ -76,6 +77,7 @@ def main():
                 LoadCell.set_add_mass += LCD.display_add_int
 
         elif Rotary.change != 0:
+            print('change')
             Rotary.change = 0
             if LCD.editing:
                 LCD.display_add_int += (Rotary.change * 10)
