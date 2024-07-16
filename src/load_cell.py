@@ -60,7 +60,7 @@ if __name__ == '__main__':
         LC_DOUT_PIN = 17
         LC_SCK_PIN = 27
 
-        RAW_ZERO_VALUE = 123 # load cell raw value when scale is empty
+        RAW_ZERO_VALUE = 9478 # load cell raw value when scale is empty
         RAW_CALIB_VALUE = 145373    # load cell raw value when calibration weight is on
 
         LoadCell = LoadCell(dout_pin=LC_DOUT_PIN, pd_sck_pin=LC_SCK_PIN)
