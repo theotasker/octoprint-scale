@@ -1,4 +1,6 @@
 from hx711 import HX711
+from RPi import GPIO
+
 from statistics import mean
 
 class LoadCell():
@@ -29,8 +31,8 @@ class LoadCell():
                     (from_max - from_min) + to_min)
 
     def get_adjusted_weight(self):
-        raw_value = 1 # self.load_cell.get_raw_data(times=2)
-        mean_value =  1 # round(mean(raw_value))
+        raw_value = self.load_cell.get_raw_data(times=2)
+        mean_value = round(mean(raw_value))
         print(mean_value)
         mapped_weight = round(self.remap(mean_value))
         adjusted_weight = mapped_weight + self.zero_offset + self.set_add_mass
@@ -40,3 +42,31 @@ class LoadCell():
         adjusted_weight = self.get_adjusted_weight()
         self.set_add_mass -= adjusted_weight
         return
+    
+
+if __name__ == '__main__':
+    try:
+        print('Testing LoadCell')
+        from time import sleep
+
+        LC_DOUT_PIN = 17
+        LC_SCK_PIN = 27
+
+        RAW_ZERO_VALUE = 123 # load cell raw value when scale is empty
+        RAW_CALIB_VALUE = 145373    # load cell raw value when calibration weight is on
+
+        LoadCell = LoadCell(dout_pin=LC_DOUT_PIN, pd_sck_pin=LC_SCK_PIN)
+        LoadCell.set_calib_values(RAW_ZERO_VALUE, RAW_CALIB_VALUE)
+
+        while True:
+            print(f'Adjusted weight: {LoadCell.get_adjusted_weight()}')
+            sleep(1)
+
+    except Exception as e:
+        raise e
+    
+    finally:
+        GPIO.cleanup() 
+        print('Test done')
+        print('Exiting...')
+        exit(0)
