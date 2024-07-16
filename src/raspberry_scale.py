@@ -97,8 +97,8 @@ def main():
     LCD.update(current_weight)
 
     cycle_time = time.time() - start_time
-    if cycle_time < 0.5:
-        sleep_time = 0.5 - cycle_time
+    if cycle_time < 0.1:
+        sleep_time = 0.1 - cycle_time
         print(f'Sleeping for {sleep_time} seconds')
         time.sleep(sleep_time)
     else:
