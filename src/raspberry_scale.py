@@ -77,7 +77,6 @@ def main():
             LoadCell.set_add_mass += LCD.display_add_int
 
     elif Rotary.change != 0:
-        Rotary.change = 0
         if LCD.editing:
             LCD.display_add_int += (Rotary.change * 10)
 
@@ -87,6 +86,8 @@ def main():
                 LCD.current_option = 0
             elif LCD.current_option < 0:
                 LCD.current_option = 2
+
+        Rotary.change = 0
 
         print(f'current_option: {LCD.current_option}')
         print(f'section: {LCD.SECOND_LINE_LIST[LCD.current_option]}')
