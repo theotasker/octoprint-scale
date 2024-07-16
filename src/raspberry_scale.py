@@ -77,7 +77,6 @@ def main():
             LoadCell.set_add_mass += LCD.display_add_int
 
     elif Rotary.change != 0:
-        print('change')
         Rotary.change = 0
         if LCD.editing:
             LCD.display_add_int += (Rotary.change * 10)
@@ -89,6 +88,9 @@ def main():
             elif LCD.current_option < 0:
                 LCD.current_option = 2
 
+        print(f'current_option: {LCD.current_option}')
+        print(f'section: {LCD.SECTION_LIST[LCD.current_option]}')
+        
     current_weight = LoadCell.get_adjusted_weight()
     LCD.update(current_weight)
 
