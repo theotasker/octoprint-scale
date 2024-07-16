@@ -1,6 +1,5 @@
 from hx711 import HX711
 from RPi import GPIO
-import time
 
 from statistics import mean
 
@@ -59,9 +58,10 @@ if __name__ == '__main__':
         LoadCell = LoadCell(dout_pin=LC_DOUT_PIN, pd_sck_pin=LC_SCK_PIN)
         LoadCell.set_calib_values(RAW_ZERO_VALUE, RAW_CALIB_VALUE)
 
+        print('Reading load cell values...')
         while True:
             print(LoadCell.get_raw_data())
-            time.sleep(0.5)
+            sleep(0.5)
 
     except Exception as e:
         raise e
