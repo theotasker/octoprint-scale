@@ -12,7 +12,7 @@ class LCD():
         self.current_text = ''
         self.current_option = 0
         self.editing = False
-        self.display_add_int = 930
+        self.display_add_int = -930
         return
 
     def format_first_line(self, current_weight_int) -> str:
