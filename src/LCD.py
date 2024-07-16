@@ -22,7 +22,7 @@ class LCD():
         if self.display_add_int >= 0:
             display_add_str = f'+{self.display_add_int:03d}'
         else:
-            display_add_str = f'-{self.display_add_int:03d}'
+            display_add_str = f'{self.display_add_int:03d}'
         return self.SECOND_LINE_LIST[self.current_option].format(display_add_str)
 
     def write(self, first_line, second_line) -> None:
