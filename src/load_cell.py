@@ -59,8 +59,7 @@ if __name__ == '__main__':
         LoadCell.set_calib_values(RAW_ZERO_VALUE, RAW_CALIB_VALUE)
 
         while True:
-            print(f'Adjusted weight: {LoadCell.get_adjusted_weight()}')
-            sleep(1)
+            print(LoadCell.get_raw_data())
 
     except Exception as e:
         raise e
