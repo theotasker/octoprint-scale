@@ -47,7 +47,7 @@ class LoadCell():
 if __name__ == '__main__':
     try:
         print('Testing LoadCell')
-        from time import sleep
+        import time
 
         LC_DOUT_PIN = 17
         LC_SCK_PIN = 27
@@ -60,8 +60,9 @@ if __name__ == '__main__':
 
         print('Reading load cell values...')
         while True:
+            start_time = time.time()
             print(LoadCell.load_cell.get_raw_data(times=4))
-            sleep(0.5)
+            print(f'took {time.time() - start_time} seconds')
 
     except Exception as e:
         raise e
