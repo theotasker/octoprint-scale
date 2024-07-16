@@ -105,5 +105,7 @@ if __name__ == '__main__':
         main()
     except Exception as e:
         Rotary.stop()
-        GPIO.cleanup() 
         raise e
+    
+    finally:
+        GPIO.cleanup()
