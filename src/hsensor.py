@@ -31,7 +31,7 @@ if __name__ == '__main__':
         import board
         hsensor = HSensor(board.D18)
         while True:
-            print(f'Temperature: {hsensor.get_temperature()}C')
+            print(f'Temperature: {hsensor.get_temperature(unit='f')}F')
             print(f'Humidity: {hsensor.get_humidity()}%')
             time.sleep(2)
     except Exception as e:
