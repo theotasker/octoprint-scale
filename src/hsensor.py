@@ -26,7 +26,7 @@ class HSensor():
     
     def update_stored_values(self):
         try:
-            self.temp_c = self.get_temperature(unit='c')
+            self.temp_c = self.get_temp_c(unit='c')
             self.temp_f = self.c_to_f(self.temp_c)
             self.humidity = self.get_humidity()
         except RuntimeError as error:
