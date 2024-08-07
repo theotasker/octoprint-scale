@@ -7,7 +7,7 @@ class HSensor():
         # This may be necessary on a Linux single board computer like the Raspberry Pi,
         # but it will not work in CircuitPython.
         # use the "board" libary to specify the pin number
-        self.dhtDevice = adafruit_dht.DHT11(pin, use_pulseio=False)
+        self.dhtDevice = adafruit_dht.DHT22(pin, use_pulseio=False)
         return
     
     def get_temperature(self, unit='c'):
