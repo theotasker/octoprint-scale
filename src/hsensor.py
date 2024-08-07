@@ -8,6 +8,8 @@ class HSensor():
         # but it will not work in CircuitPython.
         # use the "board" libary to specify the pin number
         self.dhtDevice = adafruit_dht.DHT22(pin, use_pulseio=False)
+        self.temperature = 0
+        self.humidity = 0
         return
     
     def get_temperature(self, unit='c'):
@@ -21,6 +23,18 @@ class HSensor():
     def get_humidity(self):
         return self.dhtDevice.humidity
     
+    def c_to_f(self, celsius):
+        return celsius * (9 / 5) + 32
+    
+    def update_stored_values(self):
+        try:
+            self.temp_c = self.get_temperature(unit='c')
+            self.temp_f = self.c_to_f(self.temp_c)
+            self.humidity = self.get_humidity()
+        except RuntimeError as error:
+            print(error.args[0])
+            return
+    
     def exit(self):
         self.dhtDevice.exit()
         return
@@ -31,9 +45,10 @@ if __name__ == '__main__':
         import board
         hsensor = HSensor(board.D18)
         while True:
-            print(f'Temperature: {hsensor.get_temperature(unit='f')}F')
-            print(f'Humidity: {hsensor.get_humidity()}%')
-            time.sleep(2)
+            hsensor.update_stored_values()
+            print(f'Temperature: {hsensor.temp_c}C / {hsensor.temp_f}F')
+            print(f'Humidity: {hsensor.humidity}%')
+            time.sleep(1)
     except Exception as e:
         hsensor.exit()
         raise e
