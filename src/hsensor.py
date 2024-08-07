@@ -22,8 +22,6 @@ class HSensor():
     def get_humidity(self):
         return self.dhtDevice.humidity
     
-
-    
     def update_stored_values(self):
         try:
             self.temp_c = self.get_temp_c()
