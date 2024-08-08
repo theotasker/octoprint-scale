@@ -3,6 +3,8 @@ from RPi import GPIO
 from LCD import LCD
 from rotary import Rotary
 from load_cell import LoadCell
+from hsensor import HSensor
+import board
 
 import time
 
@@ -24,6 +26,8 @@ ROT_CLK = 23
 ROT_DT = 24
 ROT_SW = 25
 
+HSENSOR_PIN = board.D18
+
 RAW_ZERO_VALUE = 9478 # load cell raw value when scale is empty
 RAW_CALIB_VALUE = 51485    # load cell raw value when calibration weight is on
 
@@ -35,15 +39,17 @@ RAW_CALIB_VALUE = 51485    # load cell raw value when calibration weight is on
 
 print('Init peripherals...')
 try:
-    LoadCell = LoadCell(dout_pin=LC_DOUT_PIN, pd_sck_pin=LC_SCK_PIN)
-    LoadCell.set_calib_values(RAW_ZERO_VALUE, RAW_CALIB_VALUE)
+    load_cell = LoadCell(dout_pin=LC_DOUT_PIN, pd_sck_pin=LC_SCK_PIN)
+    load_cell.set_calib_values(RAW_ZERO_VALUE, RAW_CALIB_VALUE)
     
-    LCD = LCD(LCD_PIN_RS, LCD_PIN_RW, LCD_PIN_E, LCD_PINS_DATA, GPIO.BCM)
+    lcd = LCD(LCD_PIN_RS, LCD_PIN_RW, LCD_PIN_E, LCD_PINS_DATA, GPIO.BCM)
 
-    Rotary = Rotary(ROT_CLK, ROT_DT, ROT_SW)
+    rotary = Rotary(ROT_CLK, ROT_DT, ROT_SW)
+
+    hsensor = HSensor(HSENSOR_PIN)
 
 except Exception as e:
-    Rotary.stop()
+    rotary.stop()
     GPIO.cleanup() 
     raise e
 
@@ -59,41 +65,41 @@ except Exception as e:
 
 def main():
     start_time = time.time()
-    if Rotary.switch:
+    if rotary.switch:
         print('switch')
-        Rotary.switch = False
-        Rotary.change = 0
-        if LCD.current_option == 2:
-            if LCD.editing:
-                LCD.editing = False
+        rotary.switch = False
+        rotary.change = 0
+        if lcd.current_option == 2:
+            if lcd.editing:
+                lcd.editing = False
             else:   
-                LCD.editing = True
+                lcd.editing = True
             
-        elif LCD.current_option == 0:
-            LoadCell.zero()
+        elif lcd.current_option == 0:
+            load_cell.zero()
 
-        elif LCD.current_option == 1:
-            LoadCell.set_add_mass += LCD.display_add_int
+        elif lcd.current_option == 1:
+            load_cell.set_add_mass += lcd.display_add_int
 
-    elif Rotary.change != 0:
-        print(f'Rotary change: {Rotary.change}')
-        if LCD.editing:
-            LCD.display_add_int += (Rotary.change * 10)
+    elif rotary.change != 0:
+        print(f'Rotary change: {rotary.change}')
+        if lcd.editing:
+            lcd.display_add_int += (rotary.change * 10)
 
         else:
-            LCD.current_option += Rotary.change
-            if LCD.current_option > 2:
-                LCD.current_option = 2
-            elif LCD.current_option < 0:
-                LCD.current_option = 0
+            lcd.current_option += rotary.change
+            if lcd.current_option > 2:
+                lcd.current_option = 2
+            elif lcd.current_option < 0:
+                lcd.current_option = 0
 
-        Rotary.change = 0
+        rotary.change = 0
 
-        print(f'current_option: {LCD.current_option}')
-        print(f'section: {LCD.SECOND_LINE_LIST[LCD.current_option]}')
+        print(f'current_option: {lcd.current_option}')
+        print(f'section: {lcd.SECOND_LINE_LIST[lcd.current_option]}')
 
-    current_weight = LoadCell.get_adjusted_weight()
-    LCD.update(current_weight)
+    current_weight = load_cell.get_adjusted_weight()
+    lcd.update(current_weight)
 
     cycle_time = time.time() - start_time
     if cycle_time < 0.1:
@@ -113,7 +119,7 @@ if __name__ == '__main__':
         while True:
             main()
     except Exception as e:
-        Rotary.stop()
+        rotary.stop()
         raise e
     
     finally:
