@@ -66,17 +66,26 @@ class LCD():
             return
         
         for i in range(16):
-            if self.current_text[i] != first_line[i]:
+            try:
+                if self.current_text[i] != first_line[i]:
+                    self.lcd.cursor_pos = (0, i)
+                    self.lcd.write_string(first_line[i])
+            except IndexError:
                 self.lcd.cursor_pos = (0, i)
-                self.lcd.write_string(first_line[i])
+                self.lcd.write_string(' ')
         
         for i in range(16):
-            if self.current_text[i] != second_line[i]:
+            try:
+                if self.current_text[i] != second_line[i]:
+                    self.lcd.cursor_pos = (1, i)
+                    self.lcd.write_string(second_line[i])
+            except IndexError:
                 self.lcd.cursor_pos = (1, i)
-                self.lcd.write_string(second_line[i])
+                self.lcd.write_string(' ')
         
         self.current_text = f'{first_line}\n{second_line}'
         return
+    
     
 
 if __name__ == '__main__':
