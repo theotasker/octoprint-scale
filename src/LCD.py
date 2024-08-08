@@ -2,7 +2,7 @@ from RPLCD.gpio import CharLCD
 
 
 class LCD():
-    FIRST_LINE = '{}g|{}F|{}%'
+    FIRST_LINE = '{}g|{}F|{}%H'
     SECOND_LINE_LIST = ['>zero<add:|{}|', '|zero>add:<{}|','|zero|add:>{}<']
 
     def __init__(self, pin_rs, pin_rw, pin_e, pins_data, numbering_mode):
