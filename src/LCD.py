@@ -54,6 +54,31 @@ class LCD():
         return
     
 
+    # temp, testing
+    def update_by_char(self, current_weight_int, temp_int, hum_int) -> None:
+        if self.editing:
+            self.blink_cursor(on=True)
+        else:
+            self.blink_cursor(on=False)
+        first_line = self.format_first_line(current_weight_int, temp_int, hum_int)
+        second_line = self.format_second_line()
+        if self.current_text == f'{first_line}\n{second_line}':
+            return
+        
+        for i in range(16):
+            if self.current_text[i] != first_line[i]:
+                self.lcd.cursor_pos = (0, i)
+                self.lcd.write_string(first_line[i])
+        
+        for i in range(16):
+            if self.current_text[i] != second_line[i]:
+                self.lcd.cursor_pos = (1, i)
+                self.lcd.write_string(second_line[i])
+        
+        self.current_text = f'{first_line}\n{second_line}'
+        return
+    
+
 if __name__ == '__main__':
 
     try:
