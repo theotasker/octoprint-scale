@@ -100,7 +100,10 @@ def main():
 
     current_weight = load_cell.get_adjusted_weight()
     hsensor.update_stored_values()
-    lcd.update(current_weight, hsensor.temp_f, hsensor.humidity)
+    temp_f = round(hsensor.temp_f)
+    humidity = round(hsensor.humidity)
+    
+    lcd.update(current_weight, temp_f, humidity)
 
     cycle_time = time.time() - start_time
     if cycle_time < 0.1:
