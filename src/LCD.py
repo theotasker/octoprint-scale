@@ -2,7 +2,7 @@ from RPLCD.gpio import CharLCD
 
 
 class LCD():
-    FIRST_LINE = '{}g|{}°F|{}%'
+    FIRST_LINE = '{}g|{}F|{}%'
     SECOND_LINE_LIST = ['>zero<add:|{}|', '|zero>add:<{}|','|zero|add:>{}<']
 
     def __init__(self, pin_rs, pin_rw, pin_e, pins_data, numbering_mode):
@@ -15,8 +15,8 @@ class LCD():
         self.display_add_int = -930
         return
 
-    def format_first_line(self, current_weight_int) -> str:
-        return self.FIRST_LINE.format(f'{current_weight_int:04d}', 0, 0)
+    def format_first_line(self, current_weight_int, temp_int, hum_int) -> str:
+        return self.FIRST_LINE.format(f'{current_weight_int:04d}', f'{temp_int:02d}', f'{hum_int:02d}')
     
     def format_second_line(self) -> str:
         if self.display_add_int >= 0:
@@ -39,12 +39,12 @@ class LCD():
         else:
             self.lcd.cursor_mode = 'hide'
     
-    def update(self, current_weight_int) -> None:
+    def update(self, current_weight_int, temp_int, hum_int) -> None:
         if self.editing:
             self.blink_cursor(on=True)
         else:
             self.blink_cursor(on=False)
-        first_line = self.format_first_line(current_weight_int)
+        first_line = self.format_first_line(current_weight_int, temp_int, hum_int)
         second_line = self.format_second_line()
         if self.current_text == f'{first_line}\n{second_line}':
             return

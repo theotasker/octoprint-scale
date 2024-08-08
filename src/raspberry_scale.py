@@ -99,7 +99,8 @@ def main():
         print(f'section: {lcd.SECOND_LINE_LIST[lcd.current_option]}')
 
     current_weight = load_cell.get_adjusted_weight()
-    lcd.update(current_weight)
+    hsensor.update_stored_values()
+    lcd.update(current_weight, hsensor.temp_f, hsensor.humidity)
 
     cycle_time = time.time() - start_time
     if cycle_time < 0.1:
