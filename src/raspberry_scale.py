@@ -58,7 +58,6 @@ except Exception as e:
 ##############################################################################
 
 
-
 ##############################################################################
 # Main loop
 ##############################################################################
@@ -103,7 +102,7 @@ def main():
     temp_f = round(hsensor.temp_f)
     humidity = round(hsensor.humidity)
     
-    lcd.update_by_char(current_weight, temp_f, humidity)
+    lcd.update(current_weight, temp_f, humidity)
 
     cycle_time = time.time() - start_time
     if cycle_time < 0.1:

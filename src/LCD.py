@@ -1,5 +1,5 @@
 from RPLCD.gpio import CharLCD
-
+import time
 
 class LCD():
     FIRST_LINE = '{}g|{}F|{}%H'
@@ -14,6 +14,7 @@ class LCD():
         self.editing = False
         self.display_add_int = -930
         self.update(0, 0, 0)
+        self.full_refresh_time = time.time()
         return
 
     def format_first_line(self, current_weight_int, temp_int, hum_int) -> str:
@@ -40,7 +41,7 @@ class LCD():
         else:
             self.lcd.cursor_mode = 'hide'
     
-    def update(self, current_weight_int, temp_int, hum_int) -> None:
+    def update_full(self, current_weight_int, temp_int, hum_int) -> None:
         if self.editing:
             self.blink_cursor(on=True)
         else:
@@ -86,6 +87,14 @@ class LCD():
         
         self.current_text = f'{first_line}\n{second_line}'
         return
+    
+    def update(self, current_weight_int, temp_int, hum_int) -> None:
+        current_time = time.time()
+        if current_time - self.full_refresh_time > 10:
+            self.full_refresh_time = current_time
+            self.update_full(current_weight_int, temp_int, hum_int)
+        else:
+            self.update_by_char(current_weight_int, temp_int, hum_int)
     
     
 
